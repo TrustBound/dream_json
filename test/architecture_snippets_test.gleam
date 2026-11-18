@@ -1,27 +1,40 @@
-//// Tests for the dream_json snippet in docs/reference/architecture.md.
+//// Tests for the dream_json snippet in Dream's architecture reference.
 
+import dream_test/matchers.{be_equal, or_fail_with, should}
+import dream_test/types.{type TestSuite}
+import dream_test/unit.{describe, group, it}
 import gleam/option.{None, Some}
-import gleeunit/should
 import snippets/architecture_json.{Profile}
 
-pub fn profile_to_json_encodes_some_as_the_value_and_none_as_null_test() {
-  // Arrange
-  let profile = Profile(email: Some("user@example.com"), age: None)
+pub fn tests() -> TestSuite(Nil) {
+  describe("architecture snippets", [
+    group("architecture_json.profile_to_json", [
+      it("encodes Some as the value and None as null", fn() {
+        // Arrange
+        let profile = Profile(email: Some("user@example.com"), age: None)
 
-  // Act
-  let json = architecture_json.profile_to_json(profile)
+        // Act
+        let result = architecture_json.profile_to_json(profile)
 
-  // Assert
-  json |> should.equal("{\"email\":\"user@example.com\",\"age\":null}")
-}
+        // Assert
+        result
+        |> should
+        |> be_equal("{\"email\":\"user@example.com\",\"age\":null}")
+        |> or_fail_with("Expected the email and a null age")
+      }),
+      it("encodes an age", fn() {
+        // Arrange
+        let profile = Profile(email: None, age: Some(36))
 
-pub fn profile_to_json_encodes_an_age_test() {
-  // Arrange
-  let profile = Profile(email: None, age: Some(36))
+        // Act
+        let result = architecture_json.profile_to_json(profile)
 
-  // Act
-  let json = architecture_json.profile_to_json(profile)
-
-  // Assert
-  json |> should.equal("{\"email\":null,\"age\":36}")
+        // Assert
+        result
+        |> should
+        |> be_equal("{\"email\":null,\"age\":36}")
+        |> or_fail_with("Expected a null email and the age")
+      }),
+    ]),
+  ])
 }

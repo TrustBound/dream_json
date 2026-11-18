@@ -2,10 +2,10 @@ name = "dream_json"
 version = "1.0.3"
 description = "JSON encoding utilities for Gleam applications"
 licences = ["MIT"]
-repository = { type = "github", user = "TrustBound", repo = "dream" }
+repository = { type = "github", user = "TrustBound", repo = "dream_json" }
 links = [
     { title = "Documentation", href = "https://hexdocs.pm/dream_json" },
-    { title = "GitHub", href = "https://github.com/TrustBound/dream" },
+    { title = "GitHub", href = "https://github.com/TrustBound/dream_json" },
 ]
 
 [dependencies]
@@ -14,5 +14,5 @@ gleam_json = ">= 2.0.0 and < 4.0.0"
 gleam_time = ">= 1.5.0 and < 2.0.0"
 
 [dev-dependencies]
-gleeunit = ">= 1.0.0 and < 2.0.0"
-
+# Switched to a Hex version range once it is published.
+dream_test = { git = "https://github.com/TrustBound/dream_test.git", ref = "c583145874e63118cc5e680a293dd52cd4c35517" }
