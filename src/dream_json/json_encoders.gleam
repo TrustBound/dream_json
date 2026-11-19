@@ -1,63 +1,83 @@
-//// Common JSON encoding utilities for Gleam types
+//// JSON encoders for optional values and timestamps.
 ////
-//// This module provides convenience functions for encoding common Gleam types
-//// to JSON, handling optional values and timestamps. These functions handle
-//// the common pattern of encoding `Option` types as either their value or `null`.
+//// Use these functions when you build a JSON object with `gleam/json` and a
+//// field can be missing. Each `optional_*` function encodes `Some(value)` as
+//// the JSON value and `None` as `null`. This is the usual form for optional
+//// fields in a JSON API.
 ////
 //// ## Quick Start
+////
+//// ### Build a user object <a href="https://github.com/TrustBound/dream_json/blob/1.0.3/test/snippets/quick_start.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 ////
 //// ```gleam
 //// import dream_json/json_encoders as encoders
 //// import gleam/json
 //// import gleam/option
+//// import gleam/time/timestamp.{type Timestamp}
 ////
-//// let user_json = json.object([
-////   #("name", json.string("Alice")),
-////   #("email", encoders.optional_string(user.email)),
-////   #("age", encoders.optional_int(user.age)),
-////   #("created_at", encoders.timestamp(user.created_at)),
-//// ])
+//// pub fn user_json(created_at: Timestamp) -> String {
+////   json.object([
+////     #("name", json.string("Alice")),
+////     #("email", encoders.optional_string(option.Some("alice@example.com"))),
+////     // Encodes as null
+////     #("age", encoders.optional_int(option.None)),
+////     #("created_at", encoders.timestamp(option.Some(created_at))),
+////   ])
+////   |> json.to_string()
+//// }
 //// ```
 ////
 //// ## Optional Values
 ////
-//// All `optional_*` functions convert `Option` types to JSON, encoding
-//// `Some(value)` as the JSON value and `None` as `null`. This is the standard
-//// pattern for optional fields in JSON APIs.
+//// `optional_string`, `optional_int`, `optional_float` and `optional_bool`
+//// encode `Some(value)` as the JSON value and `None` as `null`.
+////
+//// ## Timestamps
+////
+//// `timestamp` encodes `Some(timestamp)` as a JSON string and `None` as
+//// `null`. The string is the form that `timestamp_to_string` returns, for
+//// example `"Timestamp(1700000000, 0)"`. It is not an ISO 8601 string.
 
 import gleam/json
 import gleam/option
 import gleam/string
 import gleam/time/timestamp
 
-/// Encode an optional string value to JSON
+/// Encodes an optional string as JSON.
 ///
-/// Converts an `Option(String)` to JSON, encoding `Some(text)` as a JSON string
-/// and `None` as `null`. This is the standard pattern for optional string fields
-/// in JSON responses.
+/// Returns a JSON string for `Some(text)` and `null` for `None`. Use it for
+/// an optional text field in a JSON object.
 ///
 /// ## Parameters
 ///
-/// - `value`: The optional string value to encode
+/// - `value`: the optional string to encode.
 ///
 /// ## Returns
 ///
-/// - `json.Json`: A JSON string if `Some`, or `null` if `None`
+/// A `json.Json` string for `Some`, or `null` for `None`.
 ///
 /// ## Example
+///
+/// ### Encode optional names <a href="https://github.com/TrustBound/dream_json/blob/1.0.3/test/snippets/doc_optional_string.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 ///
 /// ```gleam
 /// import dream_json/json_encoders as encoders
 /// import gleam/json
 /// import gleam/option
 ///
-/// let json = json.object([
-///   #("name", json.string("Alice")),
-///   #("middle_name", encoders.optional_string(option.None)),
-///   #("nickname", encoders.optional_string(option.Some("Al"))),
-/// ])
-/// // Results in: {"name": "Alice", "middle_name": null, "nickname": "Al"}
+/// pub fn name_json() -> String {
+///   json.object([
+///     #("name", json.string("Alice")),
+///     #("middle_name", encoders.optional_string(option.None)),
+///     #("nickname", encoders.optional_string(option.Some("Al"))),
+///   ])
+///   |> json.to_string()
+/// }
 /// ```
+///
+/// ## See Also
+///
+/// - `optional_int`, `optional_float` and `optional_bool` for other types.
 pub fn optional_string(value: option.Option(String)) -> json.Json {
   case value {
     option.Some(text) -> json.string(text)
@@ -65,33 +85,41 @@ pub fn optional_string(value: option.Option(String)) -> json.Json {
   }
 }
 
-/// Encode an optional integer to JSON
+/// Encodes an optional integer as JSON.
 ///
-/// Converts an `Option(Int)` to JSON, encoding `Some(num)` as a JSON number
-/// and `None` as `null`. Use this for optional numeric fields like counts,
-/// IDs, or ages.
+/// Returns a JSON number for `Some(num)` and `null` for `None`. Use it for an
+/// optional count, ID or age.
 ///
 /// ## Parameters
 ///
-/// - `value`: The optional integer value to encode
+/// - `value`: the optional integer to encode.
 ///
 /// ## Returns
 ///
-/// - `json.Json`: A JSON number if `Some`, or `null` if `None`
+/// A `json.Json` number for `Some`, or `null` for `None`.
 ///
 /// ## Example
+///
+/// ### Encode optional IDs <a href="https://github.com/TrustBound/dream_json/blob/1.0.3/test/snippets/doc_optional_int.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 ///
 /// ```gleam
 /// import dream_json/json_encoders as encoders
 /// import gleam/json
 /// import gleam/option
 ///
-/// let json = json.object([
-///   #("user_id", json.int(123)),
-///   #("parent_id", encoders.optional_int(option.None)),
-///   #("age", encoders.optional_int(option.Some(30))),
-/// ])
+/// pub fn account_json() -> String {
+///   json.object([
+///     #("user_id", json.int(123)),
+///     #("parent_id", encoders.optional_int(option.None)),
+///     #("age", encoders.optional_int(option.Some(30))),
+///   ])
+///   |> json.to_string()
+/// }
 /// ```
+///
+/// ## See Also
+///
+/// - `optional_float` for a number with a fraction.
 pub fn optional_int(value: option.Option(Int)) -> json.Json {
   case value {
     option.Some(num) -> json.int(num)
@@ -99,33 +127,42 @@ pub fn optional_int(value: option.Option(Int)) -> json.Json {
   }
 }
 
-/// Encode a timestamp to JSON string
+/// Encodes an optional timestamp as JSON.
 ///
-/// Converts an `Option(Timestamp)` to JSON, encoding `Some(timestamp)` as an
-/// ISO 8601 string representation and `None` as `null`. Timestamps are
-/// serialized using their string representation.
+/// Returns a JSON string for `Some(t)` and `null` for `None`. The string is
+/// the value of `timestamp_to_string(t)`, for example
+/// `"Timestamp(1700000000, 0)"`. It is not an ISO 8601 string.
 ///
 /// ## Parameters
 ///
-/// - `ts`: The optional timestamp value to encode
+/// - `ts`: the optional timestamp to encode.
 ///
 /// ## Returns
 ///
-/// - `json.Json`: A JSON string if `Some`, or `null` if `None`
+/// A `json.Json` string for `Some`, or `null` for `None`.
 ///
 /// ## Example
+///
+/// ### Encode optional times <a href="https://github.com/TrustBound/dream_json/blob/1.0.3/test/snippets/doc_timestamp.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 ///
 /// ```gleam
 /// import dream_json/json_encoders as encoders
 /// import gleam/json
-/// import gleam/time/timestamp
+/// import gleam/option
+/// import gleam/time/timestamp.{type Timestamp}
 ///
-/// let now = timestamp.now()
-/// let json = json.object([
-///   #("created_at", encoders.timestamp(option.Some(now))),
-///   #("deleted_at", encoders.timestamp(option.None)),
-/// ])
+/// pub fn record_json(created_at: Timestamp) -> String {
+///   json.object([
+///     #("created_at", encoders.timestamp(option.Some(created_at))),
+///     #("deleted_at", encoders.timestamp(option.None)),
+///   ])
+///   |> json.to_string()
+/// }
 /// ```
+///
+/// ## See Also
+///
+/// - `timestamp_to_string` for the string form of a timestamp.
 pub fn timestamp(ts: option.Option(timestamp.Timestamp)) -> json.Json {
   case ts {
     option.Some(t) -> json.string(timestamp_to_string(t))
@@ -133,59 +170,76 @@ pub fn timestamp(ts: option.Option(timestamp.Timestamp)) -> json.Json {
   }
 }
 
-/// Convert timestamp to string for serialization
+/// Converts a timestamp to a string.
 ///
-/// Converts a `Timestamp` to its string representation. This is used internally
-/// by `timestamp()` but can also be used directly when you have a non-optional
-/// timestamp.
+/// Returns the Gleam form of the timestamp: the Unix seconds and the
+/// nanoseconds, for example `"Timestamp(1700000000, 0)"`. It is not an ISO
+/// 8601 string. `timestamp` uses this function. Call it directly when the
+/// timestamp is always present.
 ///
 /// ## Parameters
 ///
-/// - `ts`: The timestamp to convert
+/// - `ts`: the timestamp to convert.
 ///
 /// ## Returns
 ///
-/// - `String`: The string representation of the timestamp
+/// A `String` such as `"Timestamp(1700000000, 0)"`.
 ///
 /// ## Example
+///
+/// ### Convert a timestamp <a href="https://github.com/TrustBound/dream_json/blob/1.0.3/test/snippets/doc_timestamp_to_string.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 ///
 /// ```gleam
 /// import dream_json/json_encoders as encoders
 /// import gleam/time/timestamp
 ///
-/// let now = timestamp.now()
-/// let timestamp_str = encoders.timestamp_to_string(now)
+/// pub fn launch_time() -> String {
+///   timestamp.from_unix_seconds(1_700_000_000)
+///   |> encoders.timestamp_to_string()
+/// }
 /// ```
+///
+/// ## See Also
+///
+/// - `timestamp` to encode an optional timestamp as JSON.
 pub fn timestamp_to_string(ts: timestamp.Timestamp) -> String {
   string.inspect(ts)
 }
 
-/// Encode an optional float to JSON
+/// Encodes an optional float as JSON.
 ///
-/// Converts an `Option(Float)` to JSON, encoding `Some(num)` as a JSON number
-/// and `None` as `null`. Use this for optional floating-point values like
-/// prices, percentages, or measurements.
+/// Returns a JSON number for `Some(num)` and `null` for `None`. Use it for an
+/// optional price, percentage or measurement.
 ///
 /// ## Parameters
 ///
-/// - `value`: The optional float value to encode
+/// - `value`: the optional float to encode.
 ///
 /// ## Returns
 ///
-/// - `json.Json`: A JSON number if `Some`, or `null` if `None`
+/// A `json.Json` number for `Some`, or `null` for `None`.
 ///
 /// ## Example
+///
+/// ### Encode optional prices <a href="https://github.com/TrustBound/dream_json/blob/1.0.3/test/snippets/doc_optional_float.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 ///
 /// ```gleam
 /// import dream_json/json_encoders as encoders
 /// import gleam/json
 /// import gleam/option
 ///
-/// let json = json.object([
-///   #("price", encoders.optional_float(option.Some(19.99))),
-///   #("discount", encoders.optional_float(option.None)),
-/// ])
+/// pub fn price_json() -> String {
+///   json.object([
+///     #("price", encoders.optional_float(option.Some(19.99))),
+///     #("discount", encoders.optional_float(option.None)),
+///   ])
+///   |> json.to_string()
+/// }
 /// ```
+///
+/// ## See Also
+///
+/// - `optional_int` for a whole number.
 pub fn optional_float(value: option.Option(Float)) -> json.Json {
   case value {
     option.Some(num) -> json.float(num)
@@ -193,31 +247,40 @@ pub fn optional_float(value: option.Option(Float)) -> json.Json {
   }
 }
 
-/// Encode an optional boolean to JSON
+/// Encodes an optional boolean as JSON.
 ///
-/// Converts an `Option(Bool)` to JSON, encoding `Some(val)` as a JSON boolean
-/// and `None` as `null`. Use this for optional boolean flags or settings.
+/// Returns a JSON boolean for `Some(val)` and `null` for `None`. Use it for an
+/// optional flag or setting.
 ///
 /// ## Parameters
 ///
-/// - `value`: The optional boolean value to encode
+/// - `value`: the optional boolean to encode.
 ///
 /// ## Returns
 ///
-/// - `json.Json`: A JSON boolean if `Some`, or `null` if `None`
+/// A `json.Json` boolean for `Some`, or `null` for `None`.
 ///
 /// ## Example
+///
+/// ### Encode optional flags <a href="https://github.com/TrustBound/dream_json/blob/1.0.3/test/snippets/doc_optional_bool.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 ///
 /// ```gleam
 /// import dream_json/json_encoders as encoders
 /// import gleam/json
 /// import gleam/option
 ///
-/// let json = json.object([
-///   #("is_active", encoders.optional_bool(option.Some(True))),
-///   #("is_verified", encoders.optional_bool(option.None)),
-/// ])
+/// pub fn flags_json() -> String {
+///   json.object([
+///     #("is_active", encoders.optional_bool(option.Some(True))),
+///     #("is_verified", encoders.optional_bool(option.None)),
+///   ])
+///   |> json.to_string()
+/// }
 /// ```
+///
+/// ## See Also
+///
+/// - `optional_string` and `optional_int` for other types.
 pub fn optional_bool(value: option.Option(Bool)) -> json.Json {
   case value {
     option.Some(val) -> json.bool(val)

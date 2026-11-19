@@ -11,10 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The README examples are tested snippets. Each one has a "tested
   snippet" badge that links to its source at this release's tag.
+- The doc comment examples are tested snippets too.
+- The docs no longer say that `timestamp` returns an ISO 8601 string. It
+  returns the Gleam form of the timestamp, for example
+  `"Timestamp(1700000000, 0)"`.
+- Moved to its own repository
 
 ### Testing
 
-- 5 tests, 0 failed, in about 0.2 seconds. Apple M1 Max, 10 cores, 64 GB, macOS 26.5.1, OTP 29, Gleam 1.17.0.
+- 22 tests, 0 failed, in about 0.9 seconds (`gleam test` with line coverage). Apple M1 Max, 10 cores, 64 GB, macOS 26.5.1, OTP 29, Gleam 1.19.2.
 
 ## 1.0.2 - 2025-11-21
 

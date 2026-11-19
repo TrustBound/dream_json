@@ -1,14 +1,36 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/TrustBound/dream/main/ricky_and_lucy.png" alt="Dream Logo" width="200">
-  
+  <img src="https://raw.githubusercontent.com/TrustBound/dream/main/ricky_and_lucy.png" alt="Ricky Moony and Lucy, a moon shaped mascot for Dream with the star shaped mascot for Gleam, each with cute cartoon eyes and a smile" width="200">
+
+<b>JSON encoding utilities for Gleam applications.</b>
+
+</div>
+
+<br />
+
+<div align="center">
+  <a href="https://hex.pm/packages/dream_json">
+    <img src="https://img.shields.io/hexpm/v/dream_json" alt="Hex Package">
+  </a>
+  <a href="https://github.com/TrustBound/dream_json/releases">
+    <img src="https://img.shields.io/github/v/release/TrustBound/dream_json?label=Release" alt="Latest Release">
+  </a>
   <a href="https://hexdocs.pm/dream_json">
     <img src="https://img.shields.io/badge/hex-docs-lightgreen.svg" alt="HexDocs">
   </a>
+  <a href="https://github.com/TrustBound/dream_json/actions/workflows/ci.yml?query=branch%3Amain">
+    <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/TrustBound/dream_json/badges/coverage.json" alt="Coverage">
+  </a>
+  <a href="https://github.com/TrustBound/dream_json/blob/main/LICENSE.md">
+    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License">
+  </a>
+  <a href="https://gleam.run">
+    <img src="https://img.shields.io/badge/gleam-%E2%9C%A8-ffaff3" alt="Gleam">
+  </a>
 </div>
 
-# dream_json
+<br />
 
-**JSON encoding utilities for Gleam applications.**
+# dream_json
 
 A standalone module providing convenience functions for encoding optional values and timestamps to JSON. Built with the same quality standards as [Dream](https://github.com/TrustBound/dream), but completely independent—use it in any Gleam project.
 
@@ -25,7 +47,7 @@ A standalone module providing convenience functions for encoding optional values
 gleam add dream_json
 ```
 
-## Quick Start <a href="https://github.com/TrustBound/dream/blob/dream_json-1.0.3/modules/json/test/snippets/quick_start.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
+## Quick Start <a href="https://github.com/TrustBound/dream_json/blob/1.0.3/test/snippets/quick_start.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 
 ```gleam
 import dream_json/json_encoders as encoders
@@ -51,7 +73,7 @@ pub fn user_json(created_at: Timestamp) -> String {
 
 All `optional_*` functions convert `Option` types to JSON, encoding `Some(value)` as the JSON value and `None` as `null`:
 
-#### Encode optional fields <a href="https://github.com/TrustBound/dream/blob/dream_json-1.0.3/modules/json/test/snippets/optional_values.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
+#### Encode optional fields <a href="https://github.com/TrustBound/dream_json/blob/1.0.3/test/snippets/optional_values.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 
 ```gleam
 import dream_json/json_encoders as encoders
@@ -78,9 +100,9 @@ pub fn profile_json() -> String {
 
 ### Timestamps
 
-Encode timestamps as ISO 8601 strings:
+Encode timestamps as strings. The string is the Gleam form of the timestamp, for example `"Timestamp(1700000000, 0)"`, not an ISO 8601 string:
 
-#### Encode a timestamp <a href="https://github.com/TrustBound/dream/blob/dream_json-1.0.3/modules/json/test/snippets/timestamps.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
+#### Encode a timestamp <a href="https://github.com/TrustBound/dream_json/blob/1.0.3/test/snippets/timestamps.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 
 ```gleam
 import dream_json/json_encoders as encoders
@@ -114,18 +136,24 @@ pub fn audit_json(created_at: Timestamp) -> String {
 
 ## Design Principles
 
-This module follows the same quality standards as [Dream](https://github.com/TrustBound/dream):
-
-- **No nested cases** - Clear, flat control flow
-- **No anonymous functions** - Named functions for clarity
-- **Builder pattern** - Consistent, composable APIs
-- **Type safety** - `Result` types force error handling
-- **Quality testing** - Comprehensive test coverage
+dream_json follows Dream's [design principles](https://github.com/TrustBound/dream/blob/release/3.0.0/docs/reference/design-principles.md) and [contributing guide](https://github.com/TrustBound/dream/blob/release/3.0.0/docs/contributing/contributing.md).
 
 ## About Dream
 
 This module was originally built for the [Dream](https://github.com/TrustBound/dream) web toolkit, but it's completely standalone and can be used in any Gleam project. It follows Dream's design principles and will be maintained as part of the Dream ecosystem.
 
+## Contributing
+
+See the [Contributing Guide](https://github.com/TrustBound/dream_json/blob/main/CONTRIBUTING.md) for guidelines.
+
+---
+
 ## License
 
-MIT License - see LICENSE file for details.
+MIT — see [LICENSE.md](https://github.com/TrustBound/dream_json/blob/main/LICENSE.md)
+
+---
+
+<div align="center">
+  <sub>Built in Gleam, on the BEAM, by the <a href="https://github.com/trustbound/dream">Dream Team</a> ❤️</sub>
+</div>

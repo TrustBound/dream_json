@@ -1,46 +1,62 @@
 //// Tests for the code blocks in the dream_json README.
 
+import dream_test/matchers.{be_equal, or_fail_with, should}
+import dream_test/types.{type TestSuite}
+import dream_test/unit.{describe, group, it}
 import gleam/time/timestamp
-import gleeunit/should
 import snippets/optional_values
 import snippets/quick_start
 import snippets/timestamps
 
-pub fn user_json_encodes_optional_fields_and_the_timestamp_test() {
-  // Arrange
-  let created_at = timestamp.from_unix_seconds(1_700_000_000)
+pub fn tests() -> TestSuite(Nil) {
+  describe("README snippets", [
+    group("quick_start.user_json", [
+      it("encodes the optional fields and the timestamp", fn() {
+        // Arrange
+        let created_at = timestamp.from_unix_seconds(1_700_000_000)
 
-  // Act
-  let json = quick_start.user_json(created_at)
+        // Act
+        let result = quick_start.user_json(created_at)
 
-  // Assert
-  json
-  |> should.equal(
-    "{\"name\":\"Alice\",\"email\":\"alice@example.com\",\"age\":null,\"created_at\":\"Timestamp(1700000000, 0)\"}",
-  )
-}
+        // Assert
+        result
+        |> should
+        |> be_equal(
+          "{\"name\":\"Alice\",\"email\":\"alice@example.com\",\"age\":null,\"created_at\":\"Timestamp(1700000000, 0)\"}",
+        )
+        |> or_fail_with("Expected the user JSON")
+      }),
+    ]),
+    group("optional_values.profile_json", [
+      it("encodes Some as the value and None as null", fn() {
+        // Act
+        let result = optional_values.profile_json()
 
-pub fn profile_json_encodes_some_as_the_value_and_none_as_null_test() {
-  // Act
-  let json = optional_values.profile_json()
+        // Assert
+        result
+        |> should
+        |> be_equal(
+          "{\"name\":\"Alice\",\"middle_name\":null,\"nickname\":\"Al\",\"age\":30,\"score\":null,\"is_active\":true}",
+        )
+        |> or_fail_with("Expected the profile JSON")
+      }),
+    ]),
+    group("timestamps.audit_json", [
+      it("encodes the timestamp and null", fn() {
+        // Arrange
+        let created_at = timestamp.from_unix_seconds(1_700_000_000)
 
-  // Assert
-  json
-  |> should.equal(
-    "{\"name\":\"Alice\",\"middle_name\":null,\"nickname\":\"Al\",\"age\":30,\"score\":null,\"is_active\":true}",
-  )
-}
+        // Act
+        let result = timestamps.audit_json(created_at)
 
-pub fn audit_json_encodes_the_timestamp_and_null_test() {
-  // Arrange
-  let created_at = timestamp.from_unix_seconds(1_700_000_000)
-
-  // Act
-  let json = timestamps.audit_json(created_at)
-
-  // Assert
-  json
-  |> should.equal(
-    "{\"created_at\":\"Timestamp(1700000000, 0)\",\"deleted_at\":null}",
-  )
+        // Assert
+        result
+        |> should
+        |> be_equal(
+          "{\"created_at\":\"Timestamp(1700000000, 0)\",\"deleted_at\":null}",
+        )
+        |> or_fail_with("Expected the audit JSON")
+      }),
+    ]),
+  ])
 }
