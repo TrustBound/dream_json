@@ -8,11 +8,13 @@ import dream_test/suite.{type TestSuite}
 import dream_test/unit.{describe, it}
 import gleam/dynamic/decode
 import gleam/json
+import gleam/list
 import gleam/option.{None, Some}
 import gleam/order
 import gleam/string
 import gleam/time/timestamp
-import snippets/guide_timestamps_meeting.{Meeting}
+import output_file
+import snippets/guide_timestamps_meeting.{type Meeting, Meeting}
 
 pub fn tests() -> TestSuite {
   describe("timestamps guide", [
@@ -26,14 +28,12 @@ pub fn tests() -> TestSuite {
         )
 
       // Act
-      let body = guide_timestamps_meeting.meeting_to_json(meeting)
+      let shown = guide_timestamps_meeting.meeting_to_json(meeting) <> "\n"
 
       // Assert
-      body
+      shown
       |> should
-      |> be_equal(
-        "{\"title\":\"Standup\",\"starts_at\":\"2023-11-14T22:13:20Z\",\"ends_at\":null}",
-      )
+      |> be_equal(output_file.read("guide_timestamps_meeting_without_end"))
       |> or_fail_with("Expected the meeting JSON")
     }),
     it("step 1: a fraction of a second keeps its significant digits", fn() {
@@ -49,22 +49,22 @@ pub fn tests() -> TestSuite {
         )
 
       // Act
-      let body = guide_timestamps_meeting.meeting_to_json(meeting)
+      let shown = guide_timestamps_meeting.meeting_to_json(meeting) <> "\n"
 
       // Assert
-      body
+      shown
       |> should
-      |> be_equal(
-        "{\"title\":\"Standup\",\"starts_at\":\"2023-11-14T22:13:20Z\",\"ends_at\":\"2023-11-14T22:43:20.25Z\"}",
-      )
+      |> be_equal(output_file.read("guide_timestamps_meeting_with_end"))
       |> or_fail_with("Expected the end time with .25")
     }),
     it("step 3: read_meeting reads the JSON that meeting_to_json wrote", fn() {
+      // Arrange
+      let body =
+        output_file.read("guide_timestamps_meeting_with_end")
+        |> string.trim_end()
+
       // Act
-      let result =
-        guide_timestamps_meeting.read_meeting(
-          "{\"title\":\"Standup\",\"starts_at\":\"2023-11-14T22:13:20Z\",\"ends_at\":\"2023-11-14T22:43:20.25Z\"}",
-        )
+      let result = guide_timestamps_meeting.read_meeting(body)
 
       // Assert
       result
@@ -100,71 +100,28 @@ pub fn tests() -> TestSuite {
       )
       |> or_fail_with("Expected no end time")
     }),
-    it("failure: an offset is read as the same moment in UTC", fn() {
+    it("step 4: read_meeting gives the results that the guide shows", fn() {
+      // Arrange
+      let start_fields = [
+        "\"starts_at\":\"2023-11-14T23:13:20+01:00\"",
+        "\"starts_at\":\"2023-11-14T22:13:20\"",
+        "\"starts_at\":\"Timestamp(1700000000, 0)\"",
+        "\"starts_at\":1700000000",
+      ]
+      let inputs =
+        list.append(list.map(start_fields, meeting_with_start_field), [
+          #("no \"starts_at\" key", "{\"title\":\"Standup\"}"),
+          #("{\"title\":", "{\"title\":"),
+        ])
+
       // Act
-      let result =
-        guide_timestamps_meeting.read_meeting(
-          "{\"title\":\"Standup\",\"starts_at\":\"2023-11-14T23:13:20+01:00\",\"ends_at\":null}",
-        )
+      let shown = list.map(inputs, read_meeting_line) |> string.concat()
 
       // Assert
-      result
+      shown
       |> should
-      |> be_equal(
-        Ok(Meeting(
-          title: "Standup",
-          starts_at: timestamp.from_unix_seconds(1_700_000_000),
-          ends_at: None,
-        )),
-      )
-      |> or_fail_with("Expected 22:13:20 UTC")
-    }),
-    it("failure: the version 1 text is refused", fn() {
-      // Act
-      let result =
-        guide_timestamps_meeting.read_meeting(
-          "{\"title\":\"Standup\",\"starts_at\":\"Timestamp(1700000000, 0)\",\"ends_at\":null}",
-        )
-
-      // Assert
-      result
-      |> should
-      |> be_equal(Error("starts_at: expected Timestamp, found String"))
-      |> or_fail_with("Expected the old text to be refused")
-    }),
-    it("failure: a number of seconds is refused", fn() {
-      // Act
-      let result =
-        guide_timestamps_meeting.read_meeting(
-          "{\"title\":\"Standup\",\"starts_at\":1700000000,\"ends_at\":null}",
-        )
-
-      // Assert
-      result
-      |> should
-      |> be_equal(Error("starts_at: expected String, found Int"))
-      |> or_fail_with("Expected a number to be refused")
-    }),
-    it("failure: a missing start time is refused", fn() {
-      // Act
-      let result =
-        guide_timestamps_meeting.read_meeting("{\"title\":\"Standup\"}")
-
-      // Assert
-      result
-      |> should
-      |> be_equal(Error("starts_at: expected Field, found Nothing"))
-      |> or_fail_with("Expected the missing field to be refused")
-    }),
-    it("failure: a body that is not JSON is refused", fn() {
-      // Act
-      let result = guide_timestamps_meeting.read_meeting("{\"title\":")
-
-      // Assert
-      result
-      |> should
-      |> be_equal(Error("the body is not valid JSON"))
-      |> or_fail_with("Expected the body to be refused")
+      |> be_equal(output_file.read("guide_timestamps_read_meeting"))
+      |> or_fail_with("Expected the output file of Step 4")
     }),
     it("pitfall: rounding down to milliseconds drops the last six digits", fn() {
       // Arrange
@@ -260,4 +217,31 @@ pub fn tests() -> TestSuite {
       |> or_fail_with("Expected the string that gleam_time writes today")
     }),
   ])
+}
+
+/// A line of the table of Step 4 shows this label, and the body holds the
+/// start field.
+fn meeting_with_start_field(start_field: String) -> #(String, String) {
+  #(
+    start_field,
+    "{\"title\":\"Standup\"," <> start_field <> ",\"ends_at\":null}",
+  )
+}
+
+/// Reads the body, and writes the label and the result as one line of the
+/// table of Step 4.
+fn read_meeting_line(input: #(String, String)) -> String {
+  let #(label, body) = input
+  string.pad_end(label, to: 42, with: " ")
+  <> "-> "
+  <> describe_result(guide_timestamps_meeting.read_meeting(body))
+  <> "\n"
+}
+
+fn describe_result(result: Result(Meeting, String)) -> String {
+  case result {
+    Ok(meeting) ->
+      "Ok, starts_at is " <> encoders.timestamp_to_string(meeting.starts_at)
+    Error(message) -> "Error(" <> string.inspect(message) <> ")"
+  }
 }

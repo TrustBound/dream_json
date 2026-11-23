@@ -10,6 +10,7 @@ import gleam/dynamic/decode
 import gleam/int
 import gleam/json
 import gleam/option.{None, Some}
+import output_file
 import snippets/guide_getting_started_account
 import snippets/guide_getting_started_leave_out
 
@@ -20,14 +21,12 @@ pub fn tests() -> TestSuite {
       let accounts = guide_getting_started_account.example_accounts()
 
       // Act
-      let body = guide_getting_started_account.accounts_body(accounts)
+      let shown = guide_getting_started_account.accounts_body(accounts) <> "\n"
 
       // Assert
-      body
+      shown
       |> should
-      |> be_equal(
-        "{\"accounts\":[{\"id\":1,\"name\":\"Alice\",\"nickname\":\"Al\",\"age\":36,\"rating\":4.5,\"newsletter\":true,\"tags\":[\"admin\",\"beta\"],\"created_at\":\"2023-11-14T22:13:20Z\",\"last_login_at\":\"2023-11-15T22:13:20.25Z\"},{\"id\":2,\"name\":\"Bob\",\"nickname\":null,\"age\":null,\"rating\":null,\"newsletter\":null,\"tags\":null,\"created_at\":\"2023-11-14T23:13:20Z\",\"last_login_at\":null}]}",
-      )
+      |> be_equal(output_file.read("guide_getting_started_accounts_body"))
       |> or_fail_with("Expected the response body of both accounts")
     }),
     it("step 4: profile_update_json leaves out a missing age", fn() {

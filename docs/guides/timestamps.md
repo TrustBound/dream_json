@@ -86,11 +86,15 @@ pub fn meeting_to_json(meeting: Meeting) -> String {
 
 The start time goes through `timestamp_to_string` and `json.string`. The end time goes through `encoders.timestamp`, which does the same for `Some` and writes `null` for `None`. For a meeting that starts at `1_700_000_000` seconds and has no end time, `meeting_to_json` returns:
 
+### A meeting with no end time <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/outputs/guide_timestamps_meeting_without_end.txt"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
+
 ```text
 {"title":"Standup","starts_at":"2023-11-14T22:13:20Z","ends_at":null}
 ```
 
 With an end time of `1_700_001_800` seconds and 250,000,000 nanoseconds, it returns:
+
+### A meeting with an end time <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/outputs/guide_timestamps_meeting_with_end.txt"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 
 ```text
 {"title":"Standup","starts_at":"2023-11-14T22:13:20Z","ends_at":"2023-11-14T22:43:20.25Z"}
@@ -185,6 +189,8 @@ fn describe_field_error(error: decode.DecodeError) -> String {
 ```
 
 `read_meeting` returns `Ok(meeting)` for good input, and `Error(message)` for bad input. Here is what it returns for the input that you meet in real use:
+
+### What read_meeting returns <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/outputs/guide_timestamps_read_meeting.txt"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 
 ```text
 "starts_at":"2023-11-14T23:13:20+01:00"   -> Ok, starts_at is 2023-11-14T22:13:20Z

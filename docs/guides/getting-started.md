@@ -64,6 +64,8 @@ pub fn user_json(created_at: Timestamp) -> String {
 
 Call it with the time `1_700_000_000` seconds after the Unix epoch:
 
+### The JSON of a user <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/outputs/guide_getting_started_user_json.txt"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
+
 ```text
 user_json(timestamp.from_unix_seconds(1_700_000_000))
   -> {"name":"Alice","email":"alice@example.com","age":null,"created_at":"2023-11-14T22:13:20Z"}
@@ -174,6 +176,8 @@ pub fn example_accounts() -> List(Account) {
 
 `json.array` calls `account_to_json` for each account, and `json.to_string` turns the result into the text that you send. `accounts_body(example_accounts())` returns this, on one line:
 
+### The body of both accounts <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/outputs/guide_getting_started_accounts_body.txt"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
+
 ```text
 {"accounts":[{"id":1,"name":"Alice","nickname":"Al","age":36,"rating":4.5,"newsletter":true,"tags":["admin","beta"],"created_at":"2023-11-14T22:13:20Z","last_login_at":"2023-11-15T22:13:20.25Z"},{"id":2,"name":"Bob","nickname":null,"age":null,"rating":null,"newsletter":null,"tags":null,"created_at":"2023-11-14T23:13:20Z","last_login_at":null}]}
 ```
@@ -254,8 +258,11 @@ An encoder is a pure function, so its test needs no server: build a record, enco
 
 These tests use [dream_test](https://hexdocs.pm/dream_test). It is not on Hex yet, so add it from GitHub, with the same commit that this package tests with:
 
+### Add dream_test from GitHub <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/gleam.toml#L22-L24"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
+
 ```toml
 [dev-dependencies]
+# Switched to a Hex version range once it is published.
 dream_test = { git = "https://github.com/TrustBound/dream_test.git", ref = "1639959578a14ae3577f8e3ae5cac058f933aa53" }
 ```
 

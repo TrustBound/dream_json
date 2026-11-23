@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `timestamp_to_string` returns an RFC 3339 string in UTC. `timestamp`
   encodes `Some(t)` as that string. `None` is still `null`.
 
+  #### The JSON of a timestamp, before and after <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/outputs/release_2_0_0_timestamp_text.txt"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
+
   ```text
   Before: "Timestamp(1700000000, 0)"
   After:  "2023-11-14T22:13:20Z"
@@ -40,7 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Testing
 
-- 54 tests, 0 failed, in about 0.5 seconds (`gleam test` with line coverage). Apple M1 Max, 10 cores, 64 GB, macOS 26.5.1, OTP 29, Gleam 1.19.2.
+- 49 tests, 0 failed, in about 0.5 seconds (`gleam test` with line coverage). Apple M1 Max, 10 cores, 64 GB, macOS 26.5.1, OTP 29, Gleam 1.19.2.
 
 ## [1.0.2] - 2025-11-21
 

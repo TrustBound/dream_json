@@ -6,7 +6,9 @@ import dream_test/suite.{type TestSuite}
 import dream_test/unit.{describe, group, it}
 import gleam/json
 import gleam/option.{None, Some}
+import gleam/string
 import gleam/time/timestamp
+import output_file
 
 pub fn tests() -> TestSuite {
   describe("dream_json/json_encoders", [
@@ -207,6 +209,22 @@ pub fn tests() -> TestSuite {
         |> should
         |> be_equal("1969-12-31T23:59:59Z")
         |> or_fail_with("Expected 1969-12-31T23:59:59Z")
+      }),
+      it("writes the JSON that the 2.0.0 changelog shows", fn() {
+        // Arrange
+        let value = timestamp.from_unix_seconds(1_700_000_000)
+        // Version 1 wrote the debug text of the value
+        let version_1 = json.string(string.inspect(value)) |> json.to_string()
+
+        // Act
+        let version_2 = json_encoders.timestamp(Some(value)) |> json.to_string()
+        let shown = "Before: " <> version_1 <> "\nAfter:  " <> version_2 <> "\n"
+
+        // Assert
+        shown
+        |> should
+        |> be_equal(output_file.read("release_2_0_0_timestamp_text"))
+        |> or_fail_with("Expected the output file of the changelog")
       }),
     ]),
   ])

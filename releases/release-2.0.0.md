@@ -18,6 +18,8 @@ It is a major version because the output of two functions changes. Read "Upgradi
 
 `timestamp_to_string` returns an RFC 3339 string in UTC. `timestamp` encodes `Some(t)` as that string. `None` is still `null`.
 
+#### The JSON of a timestamp, before and after <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/outputs/release_2_0_0_timestamp_text.txt"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
+
 ```text
 Before: "Timestamp(1700000000, 0)"
 After:  "2023-11-14T22:13:20Z"
@@ -51,7 +53,7 @@ The package has two guides in [`docs/guides/`](https://github.com/TrustBound/dre
 
 ## Testing
 
-- 54 tests run, 0 failed, in about 0.5 seconds with line coverage (Apple M1 Max, 10 cores, 64 GB, macOS 26.5.1, OTP 29, Gleam 1.19.2)
+- 49 tests run, 0 failed, in about 0.5 seconds with line coverage (Apple M1 Max, 10 cores, 64 GB, macOS 26.5.1, OTP 29, Gleam 1.19.2)
 
 ## Upgrading
 
