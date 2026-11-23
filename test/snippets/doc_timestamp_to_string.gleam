@@ -1,6 +1,6 @@
 //// Doc comment: timestamp_to_string
 ////
-//// Converts a timestamp that is always present to its string form.
+//// Converts a timestamp that is always present to its RFC 3339 string.
 
 import dream_json/json_encoders as encoders
 import gleam/time/timestamp

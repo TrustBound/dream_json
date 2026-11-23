@@ -75,21 +75,21 @@ pub fn tests() -> TestSuite(Nil) {
         result
         |> should
         |> be_equal(
-          "{\"created_at\":\"Timestamp(1700000000, 0)\",\"deleted_at\":null}",
+          "{\"created_at\":\"2023-11-14T22:13:20Z\",\"deleted_at\":null}",
         )
         |> or_fail_with("Expected the record JSON")
       }),
     ]),
     group("doc_timestamp_to_string.launch_time", [
-      it("returns the string form of the timestamp", fn() {
+      it("returns the RFC 3339 string of the timestamp", fn() {
         // Act
         let result = doc_timestamp_to_string.launch_time()
 
         // Assert
         result
         |> should
-        |> be_equal("Timestamp(1700000000, 0)")
-        |> or_fail_with("Expected Timestamp(1700000000, 0)")
+        |> be_equal("2023-11-14T22:13:20Z")
+        |> or_fail_with("Expected 2023-11-14T22:13:20Z")
       }),
     ]),
   ])

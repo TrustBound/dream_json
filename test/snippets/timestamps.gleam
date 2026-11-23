@@ -1,6 +1,6 @@
 //// README: Timestamps
 ////
-//// Encodes an optional timestamp as a string, or as null.
+//// Encodes an optional timestamp as an RFC 3339 string, or as null.
 
 import dream_json/json_encoders as encoders
 import gleam/json

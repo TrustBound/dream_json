@@ -1,6 +1,6 @@
 //// Doc comment: timestamp
 ////
-//// Encodes a missing timestamp as null and a present timestamp as a string.
+//// Encodes a missing timestamp as null and a present timestamp as an RFC 3339 string.
 
 import dream_json/json_encoders as encoders
 import gleam/json

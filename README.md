@@ -47,7 +47,7 @@ A standalone module providing convenience functions for encoding optional values
 gleam add dream_json
 ```
 
-## Quick Start <a href="https://github.com/TrustBound/dream_json/blob/1.0.3/test/snippets/quick_start.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
+## Quick Start <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/snippets/quick_start.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 
 ```gleam
 import dream_json/json_encoders as encoders
@@ -73,7 +73,7 @@ pub fn user_json(created_at: Timestamp) -> String {
 
 All `optional_*` functions convert `Option` types to JSON, encoding `Some(value)` as the JSON value and `None` as `null`:
 
-#### Encode optional fields <a href="https://github.com/TrustBound/dream_json/blob/1.0.3/test/snippets/optional_values.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
+#### Encode optional fields <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/snippets/optional_values.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 
 ```gleam
 import dream_json/json_encoders as encoders
@@ -100,9 +100,9 @@ pub fn profile_json() -> String {
 
 ### Timestamps
 
-Encode timestamps as strings. The string is the Gleam form of the timestamp, for example `"Timestamp(1700000000, 0)"`, not an ISO 8601 string:
+Encode timestamps as RFC 3339 strings in UTC, for example `"2023-11-14T22:13:20Z"`. Nanoseconds show as a fraction of a second, for example `"2023-11-14T22:13:20.000000005Z"`:
 
-#### Encode a timestamp <a href="https://github.com/TrustBound/dream_json/blob/1.0.3/test/snippets/timestamps.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
+#### Encode a timestamp <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/snippets/timestamps.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 
 ```gleam
 import dream_json/json_encoders as encoders
@@ -132,7 +132,7 @@ pub fn audit_json(created_at: Timestamp) -> String {
 ### Timestamp Encoders
 
 - `timestamp(ts: Option(Timestamp)) -> Json` - Encode optional timestamp
-- `timestamp_to_string(ts: Timestamp) -> String` - Convert timestamp to string
+- `timestamp_to_string(ts: Timestamp) -> String` - Convert timestamp to an RFC 3339 string in UTC
 
 ## Design Principles
 

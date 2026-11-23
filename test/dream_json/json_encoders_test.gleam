@@ -133,8 +133,8 @@ pub fn tests() -> TestSuite(Nil) {
         // Assert
         result
         |> should
-        |> be_equal("\"Timestamp(1700000000, 0)\"")
-        |> or_fail_with("Expected the timestamp string")
+        |> be_equal("\"2023-11-14T22:13:20Z\"")
+        |> or_fail_with("Expected \"2023-11-14T22:13:20Z\"")
       }),
       it("returns null for None", fn() {
         // Arrange
@@ -151,7 +151,20 @@ pub fn tests() -> TestSuite(Nil) {
       }),
     ]),
     group("timestamp_to_string", [
-      it("returns the seconds and nanoseconds of the timestamp", fn() {
+      it("returns RFC 3339 in UTC for whole seconds", fn() {
+        // Arrange
+        let value = timestamp.from_unix_seconds(1_700_000_000)
+
+        // Act
+        let result = json_encoders.timestamp_to_string(value)
+
+        // Assert
+        result
+        |> should
+        |> be_equal("2023-11-14T22:13:20Z")
+        |> or_fail_with("Expected 2023-11-14T22:13:20Z")
+      }),
+      it("shows all nine fraction digits for 5 nanoseconds", fn() {
         // Arrange
         let value =
           timestamp.from_unix_seconds_and_nanoseconds(1_700_000_000, 5)
@@ -162,8 +175,38 @@ pub fn tests() -> TestSuite(Nil) {
         // Assert
         result
         |> should
-        |> be_equal("Timestamp(1700000000, 5)")
-        |> or_fail_with("Expected Timestamp(1700000000, 5)")
+        |> be_equal("2023-11-14T22:13:20.000000005Z")
+        |> or_fail_with("Expected 2023-11-14T22:13:20.000000005Z")
+      }),
+      it("removes trailing zeros from the fraction", fn() {
+        // Arrange
+        let value =
+          timestamp.from_unix_seconds_and_nanoseconds(
+            1_700_000_000,
+            123_000_000,
+          )
+
+        // Act
+        let result = json_encoders.timestamp_to_string(value)
+
+        // Assert
+        result
+        |> should
+        |> be_equal("2023-11-14T22:13:20.123Z")
+        |> or_fail_with("Expected 2023-11-14T22:13:20.123Z")
+      }),
+      it("returns a date before 1970 for negative seconds", fn() {
+        // Arrange
+        let value = timestamp.from_unix_seconds(-1)
+
+        // Act
+        let result = json_encoders.timestamp_to_string(value)
+
+        // Assert
+        result
+        |> should
+        |> be_equal("1969-12-31T23:59:59Z")
+        |> or_fail_with("Expected 1969-12-31T23:59:59Z")
       }),
     ]),
   ])

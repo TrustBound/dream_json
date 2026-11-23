@@ -7,7 +7,7 @@
 ////
 //// ## Quick Start
 ////
-//// ### Build a user object <a href="https://github.com/TrustBound/dream_json/blob/1.0.3/test/snippets/quick_start.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
+//// ### Build a user object <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/snippets/quick_start.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 ////
 //// ```gleam
 //// import dream_json/json_encoders as encoders
@@ -35,12 +35,12 @@
 //// ## Timestamps
 ////
 //// `timestamp` encodes `Some(timestamp)` as a JSON string and `None` as
-//// `null`. The string is the form that `timestamp_to_string` returns, for
-//// example `"Timestamp(1700000000, 0)"`. It is not an ISO 8601 string.
+//// `null`. The string is the RFC 3339 form in UTC that `timestamp_to_string`
+//// returns, for example `"2023-11-14T22:13:20Z"`.
 
 import gleam/json
 import gleam/option
-import gleam/string
+import gleam/time/calendar
 import gleam/time/timestamp
 
 /// Encodes an optional string as JSON.
@@ -58,7 +58,7 @@ import gleam/time/timestamp
 ///
 /// ## Example
 ///
-/// ### Encode optional names <a href="https://github.com/TrustBound/dream_json/blob/1.0.3/test/snippets/doc_optional_string.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
+/// ### Encode optional names <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/snippets/doc_optional_string.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 ///
 /// ```gleam
 /// import dream_json/json_encoders as encoders
@@ -100,7 +100,7 @@ pub fn optional_string(value: option.Option(String)) -> json.Json {
 ///
 /// ## Example
 ///
-/// ### Encode optional IDs <a href="https://github.com/TrustBound/dream_json/blob/1.0.3/test/snippets/doc_optional_int.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
+/// ### Encode optional IDs <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/snippets/doc_optional_int.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 ///
 /// ```gleam
 /// import dream_json/json_encoders as encoders
@@ -130,8 +130,8 @@ pub fn optional_int(value: option.Option(Int)) -> json.Json {
 /// Encodes an optional timestamp as JSON.
 ///
 /// Returns a JSON string for `Some(t)` and `null` for `None`. The string is
-/// the value of `timestamp_to_string(t)`, for example
-/// `"Timestamp(1700000000, 0)"`. It is not an ISO 8601 string.
+/// the value of `timestamp_to_string(t)`: RFC 3339 in UTC, for example
+/// `"2023-11-14T22:13:20Z"`.
 ///
 /// ## Parameters
 ///
@@ -143,7 +143,7 @@ pub fn optional_int(value: option.Option(Int)) -> json.Json {
 ///
 /// ## Example
 ///
-/// ### Encode optional times <a href="https://github.com/TrustBound/dream_json/blob/1.0.3/test/snippets/doc_timestamp.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
+/// ### Encode optional times <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/snippets/doc_timestamp.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 ///
 /// ```gleam
 /// import dream_json/json_encoders as encoders
@@ -162,7 +162,7 @@ pub fn optional_int(value: option.Option(Int)) -> json.Json {
 ///
 /// ## See Also
 ///
-/// - `timestamp_to_string` for the string form of a timestamp.
+/// - `timestamp_to_string` for the RFC 3339 string of a timestamp.
 pub fn timestamp(ts: option.Option(timestamp.Timestamp)) -> json.Json {
   case ts {
     option.Some(t) -> json.string(timestamp_to_string(t))
@@ -170,12 +170,19 @@ pub fn timestamp(ts: option.Option(timestamp.Timestamp)) -> json.Json {
   }
 }
 
-/// Converts a timestamp to a string.
+/// Converts a timestamp to an RFC 3339 string in UTC.
 ///
-/// Returns the Gleam form of the timestamp: the Unix seconds and the
-/// nanoseconds, for example `"Timestamp(1700000000, 0)"`. It is not an ISO
-/// 8601 string. `timestamp` uses this function. Call it directly when the
-/// timestamp is always present.
+/// The string always ends in `Z`, for example `"2023-11-14T22:13:20Z"`.
+/// A timestamp before 1970 gives an earlier date, for example
+/// `"1969-12-31T23:59:59Z"`.
+///
+/// Nanoseconds show as a fraction of a second after a dot. The fraction has
+/// at most nine digits, and trailing zeros are removed: 5 nanoseconds give
+/// `"2023-11-14T22:13:20.000000005Z"`, and 123,000,000 nanoseconds give
+/// `"2023-11-14T22:13:20.123Z"`. Zero nanoseconds give no fraction.
+///
+/// `timestamp` uses this function. Call it directly when the timestamp is
+/// always present.
 ///
 /// ## Parameters
 ///
@@ -183,11 +190,11 @@ pub fn timestamp(ts: option.Option(timestamp.Timestamp)) -> json.Json {
 ///
 /// ## Returns
 ///
-/// A `String` such as `"Timestamp(1700000000, 0)"`.
+/// A `String` such as `"2023-11-14T22:13:20Z"`.
 ///
 /// ## Example
 ///
-/// ### Convert a timestamp <a href="https://github.com/TrustBound/dream_json/blob/1.0.3/test/snippets/doc_timestamp_to_string.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
+/// ### Convert a timestamp <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/snippets/doc_timestamp_to_string.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 ///
 /// ```gleam
 /// import dream_json/json_encoders as encoders
@@ -203,7 +210,7 @@ pub fn timestamp(ts: option.Option(timestamp.Timestamp)) -> json.Json {
 ///
 /// - `timestamp` to encode an optional timestamp as JSON.
 pub fn timestamp_to_string(ts: timestamp.Timestamp) -> String {
-  string.inspect(ts)
+  timestamp.to_rfc3339(ts, calendar.utc_offset)
 }
 
 /// Encodes an optional float as JSON.
@@ -221,7 +228,7 @@ pub fn timestamp_to_string(ts: timestamp.Timestamp) -> String {
 ///
 /// ## Example
 ///
-/// ### Encode optional prices <a href="https://github.com/TrustBound/dream_json/blob/1.0.3/test/snippets/doc_optional_float.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
+/// ### Encode optional prices <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/snippets/doc_optional_float.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 ///
 /// ```gleam
 /// import dream_json/json_encoders as encoders
@@ -262,7 +269,7 @@ pub fn optional_float(value: option.Option(Float)) -> json.Json {
 ///
 /// ## Example
 ///
-/// ### Encode optional flags <a href="https://github.com/TrustBound/dream_json/blob/1.0.3/test/snippets/doc_optional_bool.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
+/// ### Encode optional flags <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/snippets/doc_optional_bool.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 ///
 /// ```gleam
 /// import dream_json/json_encoders as encoders

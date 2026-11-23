@@ -22,7 +22,7 @@ pub fn tests() -> TestSuite(Nil) {
         result
         |> should
         |> be_equal(
-          "{\"name\":\"Alice\",\"email\":\"alice@example.com\",\"age\":null,\"created_at\":\"Timestamp(1700000000, 0)\"}",
+          "{\"name\":\"Alice\",\"email\":\"alice@example.com\",\"age\":null,\"created_at\":\"2023-11-14T22:13:20Z\"}",
         )
         |> or_fail_with("Expected the user JSON")
       }),
@@ -53,7 +53,7 @@ pub fn tests() -> TestSuite(Nil) {
         result
         |> should
         |> be_equal(
-          "{\"created_at\":\"Timestamp(1700000000, 0)\",\"deleted_at\":null}",
+          "{\"created_at\":\"2023-11-14T22:13:20Z\",\"deleted_at\":null}",
         )
         |> or_fail_with("Expected the audit JSON")
       }),
