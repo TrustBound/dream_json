@@ -8,31 +8,19 @@
 <br />
 
 <div align="center">
-  <a href="https://hex.pm/packages/dream_json">
-    <img src="https://img.shields.io/hexpm/v/dream_json" alt="Hex Package">
-  </a>
-  <a href="https://github.com/TrustBound/dream_json/releases">
-    <img src="https://img.shields.io/github/v/release/TrustBound/dream_json?label=Release" alt="Latest Release">
-  </a>
-  <a href="https://hexdocs.pm/dream_json">
-    <img src="https://img.shields.io/badge/hex-docs-lightgreen.svg" alt="HexDocs">
-  </a>
-  <a href="https://github.com/TrustBound/dream_json/actions/workflows/ci.yml?query=branch%3Amain">
-    <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/TrustBound/dream_json/badges/coverage.json" alt="Coverage">
-  </a>
-  <a href="https://github.com/TrustBound/dream_json/blob/main/LICENSE.md">
-    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License">
-  </a>
-  <a href="https://gleam.run">
-    <img src="https://img.shields.io/badge/gleam-%E2%9C%A8-ffaff3" alt="Gleam">
-  </a>
+  <a href="https://hex.pm/packages/dream_json"><img src="https://img.shields.io/hexpm/v/dream_json" alt="Hex Package"></a>
+  <a href="https://github.com/TrustBound/dream_json/releases"><img src="https://img.shields.io/github/v/release/TrustBound/dream_json?label=Release" alt="Latest Release"></a>
+  <a href="https://hexdocs.pm/dream_json"><img src="https://img.shields.io/badge/hex-docs-lightgreen.svg" alt="HexDocs"></a>
+  <a href="https://github.com/TrustBound/dream_json/actions/workflows/ci.yml?query=branch%3Amain"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/TrustBound/dream_json/badges/coverage.json" alt="Coverage"></a>
+  <a href="https://github.com/TrustBound/dream_json/blob/main/LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License"></a>
+  <a href="https://gleam.run"><img src="https://img.shields.io/badge/gleam-%E2%9C%A8-ffaff3" alt="Gleam"></a>
 </div>
 
 <br />
 
 # dream_json
 
-A standalone module providing convenience functions for encoding optional values and timestamps to JSON. Built with the same quality standards as [Dream](https://github.com/TrustBound/dream), but completely independent—use it in any Gleam project.
+A standalone module with convenience functions that encode optional values and timestamps to JSON. It is built with the same quality standards as [Dream](https://github.com/TrustBound/dream), but it is completely independent. Use it in any Gleam project.
 
 ## Features
 
@@ -47,7 +35,9 @@ A standalone module providing convenience functions for encoding optional values
 gleam add dream_json
 ```
 
-## Quick Start <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/snippets/quick_start.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
+## Quick Start
+
+### Build a user object <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/snippets/quick_start.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a> <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/docs/guides/getting-started.md#build-a-user-object-"><img align="right" alt="Guide" src="https://img.shields.io/badge/%F0%9F%93%96_read-guide-blue.svg?style=flat-square"></a>
 
 ```gleam
 import dream_json/json_encoders as encoders
@@ -67,72 +57,15 @@ pub fn user_json(created_at: Timestamp) -> String {
 }
 ```
 
-## Usage
+## Guides
 
-### Optional Values
-
-All `optional_*` functions convert `Option` types to JSON, encoding `Some(value)` as the JSON value and `None` as `null`:
-
-#### Encode optional fields <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/snippets/optional_values.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
-
-```gleam
-import dream_json/json_encoders as encoders
-import gleam/json
-import gleam/option
-
-pub fn profile_json() -> String {
-  json.object([
-    #("name", json.string("Alice")),
-    // null
-    #("middle_name", encoders.optional_string(option.None)),
-    // "Al"
-    #("nickname", encoders.optional_string(option.Some("Al"))),
-    // 30
-    #("age", encoders.optional_int(option.Some(30))),
-    // null
-    #("score", encoders.optional_float(option.None)),
-    // true
-    #("is_active", encoders.optional_bool(option.Some(True))),
-  ])
-  |> json.to_string()
-}
-```
-
-### Timestamps
-
-Encode timestamps as RFC 3339 strings in UTC, for example `"2023-11-14T22:13:20Z"`. Nanoseconds show as a fraction of a second, for example `"2023-11-14T22:13:20.000000005Z"`:
-
-#### Encode a timestamp <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/snippets/timestamps.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
-
-```gleam
-import dream_json/json_encoders as encoders
-import gleam/json
-import gleam/option
-import gleam/time/timestamp.{type Timestamp}
-
-pub fn audit_json(created_at: Timestamp) -> String {
-  json.object([
-    #("created_at", encoders.timestamp(option.Some(created_at))),
-    // null
-    #("deleted_at", encoders.timestamp(option.None)),
-  ])
-  |> json.to_string()
-}
-```
+- [Getting started](https://github.com/TrustBound/dream_json/blob/main/docs/guides/getting-started.md): install the package and build a first JSON object
+- [Optional values](https://github.com/TrustBound/dream_json/blob/main/docs/guides/optional-values.md): encode optional strings, integers, floats and booleans as their value or as `null`
+- [Timestamps](https://github.com/TrustBound/dream_json/blob/main/docs/guides/timestamps.md): encode timestamps as RFC 3339 strings in UTC
 
 ## API Reference
 
-### Optional Value Encoders
-
-- `optional_string(value: Option(String)) -> Json` - Encode optional string
-- `optional_int(value: Option(Int)) -> Json` - Encode optional integer
-- `optional_float(value: Option(Float)) -> Json` - Encode optional float
-- `optional_bool(value: Option(Bool)) -> Json` - Encode optional boolean
-
-### Timestamp Encoders
-
-- `timestamp(ts: Option(Timestamp)) -> Json` - Encode optional timestamp
-- `timestamp_to_string(ts: Timestamp) -> String` - Convert timestamp to an RFC 3339 string in UTC
+The full API reference is on [HexDocs](https://hexdocs.pm/dream_json). Each guide lists the functions it uses.
 
 ## Design Principles
 

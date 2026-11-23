@@ -32,6 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   snippet" badge that links to its source at this release's tag.
 - The doc comment examples are tested snippets too.
 - Moved to its own repository
+- The package has guides in `docs/guides/`. The README is short and links
+  to them, and HexDocs shows the guides.
 
 ### Testing
 
