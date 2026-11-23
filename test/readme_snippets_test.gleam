@@ -1,14 +1,14 @@
 //// Tests for the code blocks in the dream_json README.
 
 import dream_test/matchers.{be_equal, or_fail_with, should}
-import dream_test/types.{type TestSuite}
+import dream_test/suite.{type TestSuite}
 import dream_test/unit.{describe, group, it}
 import gleam/time/timestamp
 import snippets/optional_values
 import snippets/quick_start
 import snippets/timestamps
 
-pub fn tests() -> TestSuite(Nil) {
+pub fn tests() -> TestSuite {
   describe("README snippets", [
     group("quick_start.user_json", [
       it("encodes the optional fields and the timestamp", fn() {

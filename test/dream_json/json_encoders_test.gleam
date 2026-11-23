@@ -2,13 +2,13 @@
 
 import dream_json/json_encoders
 import dream_test/matchers.{be_equal, or_fail_with, should}
-import dream_test/types.{type TestSuite}
+import dream_test/suite.{type TestSuite}
 import dream_test/unit.{describe, group, it}
 import gleam/json
 import gleam/option.{None, Some}
 import gleam/time/timestamp
 
-pub fn tests() -> TestSuite(Nil) {
+pub fn tests() -> TestSuite {
   describe("dream_json/json_encoders", [
     group("optional_string", [
       it("returns a JSON string for Some", fn() {

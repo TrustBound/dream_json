@@ -1,7 +1,7 @@
 //// Tests for the examples in the dream_json doc comments.
 
 import dream_test/matchers.{be_equal, or_fail_with, should}
-import dream_test/types.{type TestSuite}
+import dream_test/suite.{type TestSuite}
 import dream_test/unit.{describe, group, it}
 import gleam/time/timestamp
 import snippets/doc_optional_bool
@@ -11,7 +11,7 @@ import snippets/doc_optional_string
 import snippets/doc_timestamp
 import snippets/doc_timestamp_to_string
 
-pub fn tests() -> TestSuite(Nil) {
+pub fn tests() -> TestSuite {
   describe("doc comment snippets", [
     group("doc_optional_string.name_json", [
       it("encodes the name, a null middle name and the nickname", fn() {
