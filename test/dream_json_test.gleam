@@ -1,11 +1,15 @@
 import architecture_snippets_test
 import doc_snippets_test
+import dream_json/guide_getting_started_test
+import dream_json/guide_timestamps_test
 import dream_json/json_encoders_test
 import dream_test/coverage
 import dream_test/reporters/bdd
 import dream_test/reporters/progress
 import dream_test/runner
 import readme_snippets_test
+import snippets/guide_getting_started_testing
+import snippets/guide_timestamps_testing
 
 pub fn main() {
   runner.new([
@@ -13,6 +17,10 @@ pub fn main() {
     readme_snippets_test.tests(),
     doc_snippets_test.tests(),
     architecture_snippets_test.tests(),
+    guide_getting_started_test.tests(),
+    guide_getting_started_testing.tests(),
+    guide_timestamps_test.tests(),
+    guide_timestamps_testing.tests(),
   ])
   |> runner.progress_reporter(progress.new())
   |> runner.results_reporters([bdd.new() |> bdd.color()])

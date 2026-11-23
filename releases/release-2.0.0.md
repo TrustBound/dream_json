@@ -47,11 +47,11 @@ Each code example in the README and in the doc comments has a "tested snippet" b
 
 ### Guides
 
-The package has guides in [`docs/guides/`](https://github.com/TrustBound/dream_json/tree/main/docs/guides). The README is short and links to them, and HexDocs shows the guides.
+The package has two guides in [`docs/guides/`](https://github.com/TrustBound/dream_json/tree/main/docs/guides). [Getting started](https://github.com/TrustBound/dream_json/blob/main/docs/guides/getting-started.md) turns a record with optional fields and timestamps into the JSON body of an API response, and tests the encoder. [Send timestamps and read them back](https://github.com/TrustBound/dream_json/blob/main/docs/guides/timestamps.md) shows the exact RFC 3339 string for each timestamp, decodes it back into a `Timestamp`, and handles bad input. Each guide has failure cases, a test and common pitfalls, and every code block is a tested snippet. The README is short and links to them, and HexDocs shows the guides.
 
 ## Testing
 
-- 25 tests run, 0 failed, in about 0.5 seconds with line coverage (Apple M1 Max, 10 cores, 64 GB, macOS 26.5.1, OTP 29, Gleam 1.19.2)
+- 54 tests run, 0 failed, in about 0.5 seconds with line coverage (Apple M1 Max, 10 cores, 64 GB, macOS 26.5.1, OTP 29, Gleam 1.19.2)
 
 ## Upgrading
 
@@ -83,8 +83,7 @@ Stored data that holds the old text does not change. Convert it, or keep a reade
 - [dream_json](https://hexdocs.pm/dream_json) - v2.0.0
 - [README](https://github.com/TrustBound/dream_json/blob/main/README.md)
 - [Getting started](https://github.com/TrustBound/dream_json/blob/main/docs/guides/getting-started.md)
-- [Optional values](https://github.com/TrustBound/dream_json/blob/main/docs/guides/optional-values.md)
-- [Timestamps](https://github.com/TrustBound/dream_json/blob/main/docs/guides/timestamps.md)
+- [Send timestamps and read them back](https://github.com/TrustBound/dream_json/blob/main/docs/guides/timestamps.md)
 - [Changelog](https://github.com/TrustBound/dream_json/blob/main/CHANGELOG.md)
 
 ## Community

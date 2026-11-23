@@ -32,12 +32,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   snippet" badge that links to its source at this release's tag.
 - The doc comment examples are tested snippets too.
 - Moved to its own repository
-- The package has guides in `docs/guides/`. The README is short and links
-  to them, and HexDocs shows the guides.
+- The package has two guides in `docs/guides/`: "Getting started: turn a
+  record into a JSON response" and "Send timestamps and read them back".
+  Each one walks through a task step by step, with failure cases, a test
+  and common pitfalls. Every code block is a tested snippet. The README is
+  short and links to them, and HexDocs shows the guides.
 
 ### Testing
 
-- 25 tests, 0 failed, in about 0.5 seconds (`gleam test` with line coverage). Apple M1 Max, 10 cores, 64 GB, macOS 26.5.1, OTP 29, Gleam 1.19.2.
+- 54 tests, 0 failed, in about 0.5 seconds (`gleam test` with line coverage). Apple M1 Max, 10 cores, 64 GB, macOS 26.5.1, OTP 29, Gleam 1.19.2.
 
 ## [1.0.2] - 2025-11-21
 

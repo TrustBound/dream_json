@@ -11,7 +11,6 @@ links = [
 [documentation]
 pages = [
     { title = "Getting started", path = "guides/getting-started.html", source = "./docs/guides/getting-started.md" },
-    { title = "Optional values", path = "guides/optional-values.html", source = "./docs/guides/optional-values.md" },
     { title = "Timestamps", path = "guides/timestamps.html", source = "./docs/guides/timestamps.md" },
 ]
 

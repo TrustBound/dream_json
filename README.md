@@ -59,13 +59,12 @@ pub fn user_json(created_at: Timestamp) -> String {
 
 ## Guides
 
-- [Getting started](https://github.com/TrustBound/dream_json/blob/main/docs/guides/getting-started.md): install the package and build a first JSON object
-- [Optional values](https://github.com/TrustBound/dream_json/blob/main/docs/guides/optional-values.md): encode optional strings, integers, floats and booleans as their value or as `null`
-- [Timestamps](https://github.com/TrustBound/dream_json/blob/main/docs/guides/timestamps.md): encode timestamps as RFC 3339 strings in UTC
+- [Getting started: turn a record into a JSON response](https://github.com/TrustBound/dream_json/blob/main/docs/guides/getting-started.md): install the package, write an encoder for a record with optional fields and timestamps, build a response body and test it
+- [Send timestamps and read them back](https://github.com/TrustBound/dream_json/blob/main/docs/guides/timestamps.md): the exact RFC 3339 string for each timestamp, a decoder that reads it back, and what to do with bad input
 
 ## API Reference
 
-The full API reference is on [HexDocs](https://hexdocs.pm/dream_json). Each guide lists the functions it uses.
+The full API reference is on [HexDocs](https://hexdocs.pm/dream_json). The guides show each function where a task needs it.
 
 ## Design Principles
 
