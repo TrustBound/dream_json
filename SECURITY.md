@@ -4,7 +4,8 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.x     | ✅ Active support  |
+| 2.x     | ✅ Active support  |
+| < 2.0   | ❌ Not supported   |
 
 ## What dream_json Is Responsible For
 
