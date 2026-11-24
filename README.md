@@ -37,7 +37,7 @@ gleam add dream_json
 
 ## Quick Start
 
-### Build a user object <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/snippets/quick_start.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a> <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/docs/guides/getting-started.md#build-a-user-object-"><img align="right" alt="Guide" src="https://img.shields.io/badge/%F0%9F%93%96_read-guide-blue.svg?style=flat-square"></a>
+### Build a user object <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/snippets/quick_start.gleam"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a> <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/docs/guides/getting-started.md#build-a-user-object-"><img align="right" alt="Guide: Getting started: turn a record into a JSON response" title="Guide: Getting started: turn a record into a JSON response" src="https://img.shields.io/badge/%F0%9F%93%96_read-guide-blue.svg?style=flat-square"></a>
 
 ```gleam
 import dream_json/json_encoders as encoders
