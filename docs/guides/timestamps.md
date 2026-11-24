@@ -229,7 +229,7 @@ These are the inputs that break a timestamp in real use, and what the code of th
 
 The strongest test for a pair of encoder and decoder is a round trip: encode a value, decode the result, and expect the same value. Pick times that touch every form of the string: a fraction of a second, a time before 1970, and a missing end time. Also test one bad input, so that a change to the decoder that starts to accept it fails a test.
 
-These tests use [dream_test](https://hexdocs.pm/dream_test), from GitHub, as the [getting started guide](https://github.com/TrustBound/dream_json/blob/main/docs/guides/getting-started.md#test-your-encoder) shows. Here is a test module for the meeting code:
+These tests use [dream_test](https://hexdocs.pm/dream_test), added as the [getting started guide](https://github.com/TrustBound/dream_json/blob/main/docs/guides/getting-started.md#test-your-encoder) shows. Here is a test module for the meeting code:
 
 ### Test the round trip of a meeting <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/test/snippets/guide_timestamps_testing.gleam#L6-L68"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 

@@ -1,6 +1,6 @@
 # dream_json 2.0.0 Release Notes
 
-**Release Date:** not released yet (draft)
+**Release Date:** 2026-11-24
 
 This release changes how `dream_json` writes a timestamp. A timestamp is now an RFC 3339 string in UTC. Before, it was the debug text of the Gleam value, which no JSON client could read as a time.
 

@@ -256,14 +256,13 @@ The encoders accept every value of their type, so encoding cannot fail. The prob
 
 An encoder is a pure function, so its test needs no server: build a record, encode it, and compare the string. Comparing the whole string is safe, because `json.object` keeps your key order and writes no spaces. Use fixed timestamps, never `timestamp.system_time()`, so the expected string is the same on every run.
 
-These tests use [dream_test](https://hexdocs.pm/dream_test). It is not on Hex yet, so add it from GitHub, with the same commit that this package tests with:
+These tests use [dream_test](https://hexdocs.pm/dream_test). Add it as a dev dependency, with the same version range that this package tests with:
 
-### Add dream_test from GitHub <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/gleam.toml#L22-L24"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
+### Add dream_test <a href="https://github.com/TrustBound/dream_json/blob/2.0.0/gleam.toml#L22-L23"><img align="right" alt="Tested snippet" src="https://img.shields.io/badge/%F0%9F%A7%AA_tested-snippet-lightgreen.svg?style=flat-square"></a>
 
 ```toml
 [dev-dependencies]
-# Switched to a Hex version range once it is published.
-dream_test = { git = "https://github.com/TrustBound/dream_test.git", ref = "1639959578a14ae3577f8e3ae5cac058f933aa53" }
+dream_test = ">= 3.0.0 and < 4.0.0"
 ```
 
 Here is a test module for `account_to_json` from Step 2. It checks one account with every field, and one with every optional field missing:
