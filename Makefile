@@ -1,33 +1,36 @@
-# dream_json Module Makefile
+# dream_json Makefile
 
-.PHONY: test clean build format docs check
+.PHONY: test build format check check-snippets docs clean
 
-# Run the test suite
+# Run the tests with line coverage (fails below 100%)
 test:
 	@gleam test
 
-# Clean build artifacts
-clean:
-	@gleam clean
-	@rm -rf coverage
-	@rm -f erl_crash.dump
-	@find build -name "*.beam" -type f -delete 2>/dev/null || true
-
-# Build the module
+# Build the package
 build:
 	@gleam build
 
 # Format code
 format:
-	@gleam format
+	@gleam format src test
+
+# Format check, build, tests, docs build and snippet check (what CI runs)
+check:
+	@gleam format --check src test
+	@gleam build
+	@gleam test
+	@gleam docs build
+	@gleam run -m dream_snippets
+
+# Check that each code block in the docs matches a tested snippet
+check-snippets:
+	@gleam run -m dream_snippets
 
 # Generate documentation
 docs:
 	@gleam docs build
 
-# Run format check and build (useful for CI)
-check:
-	@gleam format --check
-	@gleam build
-	@gleam test
-
+# Clean build artifacts
+clean:
+	@gleam clean
+	@rm -f erl_crash.dump
